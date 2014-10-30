@@ -1,0 +1,28 @@
+{
+    "name": "cyberrebell/php-minify",
+    "description": "glue and minify css and js using php stdlib",
+    "authors": [
+        {
+            "name": "Cyberrebell",
+            "email": "chainsaw75@web.de"
+        }
+    ],
+    "type": "library",
+    "keywords": [
+        "minify",
+        "css",
+        "js",
+        "glue",
+        "php"
+    ],
+    "homepage": "https://github.com/Cyberrebell/php-minify",
+    "license": "GPL-3.0",
+    "require": {
+        "php": ">=5.4.4"
+    },
+    "autoload": {
+        "psr-0": {
+            "PhpMinify\\": "library/"
+        }
+    }
+}
