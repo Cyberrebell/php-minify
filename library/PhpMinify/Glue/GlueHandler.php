@@ -2,6 +2,8 @@
 
 namespace PhpMinify\Glue;
 
+use PhpMinify\Glue\Types\CssGlue;
+
 class GlueHandler
 {
 	protected $inputFiles;
@@ -12,6 +14,16 @@ class GlueHandler
 		$this->inputFiles = $inputFiles;
 		$this->outputFile = $outputFile;
 		$this->checkFileFormatConsistence();
+	}
+	
+	function glue() {
+		if ($this->fileFormat == 'css') {
+			$glue = new CssGlue();
+		} else if ($this->fileFormat == 'js') {
+			//todo
+		} else {
+			throw new \Exception("unknows file format. Can't glue this!");
+		}
 	}
 	
 	protected function checkFileFormatConsistence() {
