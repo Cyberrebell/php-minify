@@ -28,17 +28,22 @@ class GlueHandler
 	
 	protected function checkFileFormatConsistence() {
 		foreach ($this->inputFiles as $inputFile) {
-			$ending = substr($inputFile, strpos($inputFile, '.', -1));
+			$ending = $this->getFileEnding($inputFile);
 			if ($this->fileFormat) {
 				if ($ending != $this->fileFormat) {
-					throw new \Exception("invalid glue configuration. Can't glue ." . $ending . " file with ." . $this->fileFormat);
+					throw new \Exception("invalid glue configuration. Can't glue " . $ending . " file with " . $this->fileFormat);
 				}
 			} else {
 				$this->fileFormat = $ending;
 			}
 		}
-		if ($this->fileFormat != $this->outputFile) {
-			throw new \Exception("invalid glue configuration. Can't convert ." . $this->fileFormat . " files to ." . $this->outputFile);
+		$outputFileFormat = $this->getFileEnding($this->outputFile);
+		if ($this->fileFormat != $outputFileFormat) {
+			throw new \Exception("invalid glue configuration. Can't convert " . $this->fileFormat . " files to " . $outputFileFormat);
 		}
+	}
+	
+	protected function getFileEnding($fileName) {
+		return substr($fileName, strrpos($fileName, '.') + 1);
 	}
 }
