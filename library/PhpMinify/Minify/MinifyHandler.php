@@ -11,6 +11,7 @@ class MinifyHandler extends AbstractHandler
 	
 	function __construct($file) {
 		$this->file = $file;
+		$this->fileFormat = $this->getFileEnding($this->file);
 	}
 	
 	function minify() {
