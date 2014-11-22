@@ -18,7 +18,9 @@ class GlueHandler
 	
 	function glue() {
 		if ($this->fileFormat == 'css') {
-			$glue = new CssGlue();
+			$glue = new CssGlue($this->inputFiles, $this->outputFile);
+			$glue->glue();
+			$glue->cleanup();
 		} else if ($this->fileFormat == 'js') {
 			//todo
 		} else {
