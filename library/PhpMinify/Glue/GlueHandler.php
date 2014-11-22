@@ -3,12 +3,12 @@
 namespace PhpMinify\Glue;
 
 use PhpMinify\Glue\Types\CssGlue;
+use PhpMinify\General\AbstractHandler;
 
-class GlueHandler
+class GlueHandler extends AbstractHandler
 {
 	protected $inputFiles;
 	protected $outputFile;
-	protected $fileFormat;
 	
 	function __construct(array $inputFiles, $outputFile) {
 		$this->inputFiles = $inputFiles;
@@ -43,9 +43,5 @@ class GlueHandler
 		if ($this->fileFormat != $outputFileFormat) {
 			throw new \Exception("invalid glue configuration. Can't convert " . $this->fileFormat . " files to " . $outputFileFormat);
 		}
-	}
-	
-	protected function getFileEnding($fileName) {
-		return substr($fileName, strrpos($fileName, '.') + 1);
 	}
 }

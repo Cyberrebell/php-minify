@@ -3,6 +3,7 @@
 namespace PhpMinify\Launcher;
 
 use PhpMinify\Glue\GlueHandler;
+use PhpMinify\Minify\MinifyHandler;
 class MinifyLauncher
 {
 	protected $config = [];
@@ -39,6 +40,7 @@ class MinifyLauncher
 	}
 	
 	protected function minify($fileName) {
-		
+		$minifyHandler = new MinifyHandler($fileName);
+		$minifyHandler->minify();
 	}
 }
