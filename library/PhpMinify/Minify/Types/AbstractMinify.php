@@ -24,7 +24,34 @@ abstract class AbstractMinify
 		$this->fileContent = $content;
 	}
 	
-	function save() {
+	protected function save() {
 		file_put_contents($this->file, $this->fileContent);
+	}
+	
+	protected function removeComments() {
+		$content = $this->getFileContent();
+		
+		$content = preg_replace('/\/\*([^.]+)\*\//', '', $content);
+		
+		$this->setFileContent($content);
+	}
+	
+	protected function removeNewlines() {
+		$content = $this->getFileContent();
+		
+		$content = str_replace("\n", '', $content);
+		
+		$this->setFileContent($content);
+	}
+	
+	protected function removeSpaces() {
+		$content = $this->getFileContent();
+		
+		$content = preg_replace('/;\s+/', ';', $content);
+		$content = preg_replace('/:\s+/', ':', $content);
+		$content = preg_replace('/\s+\{\s+/', '{', $content);
+		$content = preg_replace('/;*\};?/', '};', $content);
+		
+		$this->setFileContent($content);
 	}
 }

@@ -7,9 +7,9 @@ use PhpMinify\Minify\Types\AbstractMinify;
 class CssMinify extends AbstractMinify
 {
 	function minify() {
-		$content = $this->getFileContent();
-		
-		
+		$this->removeNewlines();
+		$this->removeComments();
+		$this->removeSpaces();
 		
 		$this->save();
 	}
