@@ -1,7 +1,9 @@
 php-minify
 ==========
 
-glue and minify css and js using php stdlib
+glue and minify css and js using only php stdlib
+
+configuration example:
 
 minify.config.php
 ```sh
@@ -25,4 +27,15 @@ return [
 		'public/js/app.js'
 	]
 ];
+```
+
+usage:
+```sh
+<?php
+include 'vendor/autoload.php';
+
+use PhpMinify\Launcher\MinifyLauncher;
+
+$launcher = new MinifyLauncher(include 'minify.config.php');
+$launcher->run();
 ```

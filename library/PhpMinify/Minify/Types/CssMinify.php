@@ -13,4 +13,17 @@ class CssMinify extends AbstractMinify
 		
 		$this->save();
 	}
+	
+	protected function removeSpaces() {
+		$content = $this->getFileContent();
+		
+		$content = preg_replace('/;\s+/', ';', $content);
+		$content = preg_replace('/:\s+/', ':', $content);
+		$content = preg_replace('/\s+\{\s+/', '{', $content);
+		$content = preg_replace('/;*\};?/', '};', $content);
+		
+		$content = substr($content, 0, strlen($content) - 1);	//remove last ;
+		
+		$this->setFileContent($content);
+	}
 }

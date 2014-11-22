@@ -43,15 +43,4 @@ abstract class AbstractMinify
 		
 		$this->setFileContent($content);
 	}
-	
-	protected function removeSpaces() {
-		$content = $this->getFileContent();
-		
-		$content = preg_replace('/;\s+/', ';', $content);
-		$content = preg_replace('/:\s+/', ':', $content);
-		$content = preg_replace('/\s+\{\s+/', '{', $content);
-		$content = preg_replace('/;*\};?/', '};', $content);
-		
-		$this->setFileContent($content);
-	}
 }
