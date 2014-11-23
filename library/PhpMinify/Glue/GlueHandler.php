@@ -4,6 +4,7 @@ namespace PhpMinify\Glue;
 
 use PhpMinify\Glue\Types\CssGlue;
 use PhpMinify\General\AbstractHandler;
+use PhpMinify\Glue\Types\JsGlue;
 
 class GlueHandler extends AbstractHandler
 {
@@ -22,7 +23,9 @@ class GlueHandler extends AbstractHandler
 			$glue->glue();
 			$glue->cleanup();
 		} else if ($this->fileFormat == 'js') {
-			//todo
+			$glue = new JsGlue($this->inputFiles, $this->outputFile);
+			$glue->glue();
+			$glue->cleanup();
 		} else {
 			throw new \Exception("unknows file format. Can't glue this!");
 		}

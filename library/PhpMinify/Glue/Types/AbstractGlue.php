@@ -26,7 +26,9 @@ abstract class AbstractGlue
 	
 	protected function getOutputFileHandle() {
 		if ($this->outputFileHandle === null) {
-			unlink($this->outputFile);
+			if (file_exists($this->outputFile)) {
+				unlink($this->outputFile);
+			}
 			$this->outputFileHandle = fopen($this->outputFile, 'a');
 		}
 		return $this->outputFileHandle;
