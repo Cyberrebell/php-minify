@@ -20,7 +20,7 @@ class CssMinify extends AbstractMinify
 		$content = preg_replace('/;\s+/', ';', $content);
 		$content = preg_replace('/:\s+/', ':', $content);
 		$content = preg_replace('/\s+\{\s+/', '{', $content);
-		$content = preg_replace('/;*\};?/', '};', $content);
+		$content = preg_replace('/;*\}/', '}', $content);
 		
 		$content = substr($content, 0, strlen($content) - 1);	//remove last ;
 		
