@@ -28,10 +28,18 @@ abstract class AbstractMinify
 		file_put_contents($this->file, $this->fileContent);
 	}
 	
-	protected function removeComments() {
+	protected function removeMultilineComments() {
 		$content = $this->getFileContent();
 		
-		$content = preg_replace('/\/\*([^.]+)\*\//', '', $content);
+		$content = preg_replace('/\/\*.*\*\//sU', '', $content);
+		
+		$this->setFileContent($content);
+	}
+	
+	protected function removeOneLineComments() {
+		$content = $this->getFileContent();
+		
+		$content = preg_replace('/\n\s*\/\/.*/', '', $content);
 		
 		$this->setFileContent($content);
 	}

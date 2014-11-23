@@ -8,7 +8,7 @@ class CssMinify extends AbstractMinify
 {
 	function minify() {
 		$this->removeNewlines();
-		$this->removeComments();
+		$this->removeMultilineComments();
 		$this->removeSpaces();
 		
 		$this->save();
@@ -21,8 +21,6 @@ class CssMinify extends AbstractMinify
 		$content = preg_replace('/:\s+/', ':', $content);
 		$content = preg_replace('/\s+\{\s+/', '{', $content);
 		$content = preg_replace('/;*\}/', '}', $content);
-		
-		$content = substr($content, 0, strlen($content) - 1);	//remove last ;
 		
 		$this->setFileContent($content);
 	}

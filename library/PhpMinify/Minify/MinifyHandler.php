@@ -4,6 +4,7 @@ namespace PhpMinify\Minify;
 
 use PhpMinify\General\AbstractHandler;
 use PhpMinify\Minify\Types\CssMinify;
+use PhpMinify\Minify\Types\JsMinify;
 
 class MinifyHandler extends AbstractHandler
 {
@@ -19,7 +20,8 @@ class MinifyHandler extends AbstractHandler
 			$minify = new CssMinify($this->file);
 			$minify->minify();
 		} else if ($this->fileFormat == 'js') {
-			//todo
+			$minify = new JsMinify($this->file);
+			$minify->minify();
 		} else {
 			throw new \Exception("unknows file format. Can't minify this!");
 		}
