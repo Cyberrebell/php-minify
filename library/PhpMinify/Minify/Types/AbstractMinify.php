@@ -39,7 +39,7 @@ abstract class AbstractMinify
 	protected function removeOneLineComments() {
 		$content = $this->getFileContent();
 		
-		$content = preg_replace('/\n\s*\/\/.*/', '', $content);
+		$content = preg_replace('/\s\/\/.*/', '', $content);
 		
 		$this->setFileContent($content);
 	}

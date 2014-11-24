@@ -9,7 +9,7 @@ class JsMinify extends AbstractMinify
 	function minify() {
 		$this->removeMultilineComments();
 		$this->removeOneLineComments();
-// 		$this->removeNewlines();
+		$this->removeNewlines();
 // 		$this->removeSpaces();
 		
 		$this->save();
@@ -18,10 +18,7 @@ class JsMinify extends AbstractMinify
 	protected function removeSpaces() {
 		$content = $this->getFileContent();
 		
-// 		$content = preg_replace('/;\s+/', ';', $content);
-// 		$content = preg_replace('/:\s+/', ':', $content);
-// 		$content = preg_replace('/\s+\{\s+/', '{', $content);
-// 		$content = preg_replace('/;*\}/', '}', $content);
+		//todo
 		
 		$this->setFileContent($content);
 	}
