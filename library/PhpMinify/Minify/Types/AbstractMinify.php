@@ -25,7 +25,7 @@ abstract class AbstractMinify
 	}
 	
 	protected function save() {
-		file_put_contents($this->file, $this->fileContent);
+		file_put_contents($this->file, $this->getFileContent());
 	}
 	
 	protected function removeMultilineComments() {
