@@ -20,7 +20,7 @@ class JsMinify extends AbstractMinify
 	
 	protected function parseJsCode() {
 		$content = $this->getFileContent();
-		
+
 		$jsCode = new JsCode($content);
 		
 		$this->setFileContent($jsCode);
