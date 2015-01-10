@@ -31,7 +31,7 @@ abstract class AbstractMinify
 	protected function removeMultilineComments() {
 		$content = $this->getFileContent();
 		
-		$content = preg_replace('/\/\*.*\*\//sU', '', $content);
+		$content = preg_replace('/\'.*\'(*SKIP)(*F)|".*"(*SKIP)(*F)|\/\*.*\*\//sU', '', $content);
 		
 		$this->setFileContent($content);
 	}
@@ -39,7 +39,7 @@ abstract class AbstractMinify
 	protected function removeOneLineComments() {
 		$content = $this->getFileContent();
 		
-		$content = preg_replace('/\s\/\/.*/', '', $content);
+		$content = preg_replace('/\'.*\'(*SKIP)(*F)|".*"(*SKIP)(*F)|\/\/.*/', '', $content);
 		
 		$this->setFileContent($content);
 	}
@@ -48,6 +48,14 @@ abstract class AbstractMinify
 		$content = $this->getFileContent();
 		
 		$content = str_replace("\n", '', $content);
+		
+		$this->setFileContent($content);
+	}
+	
+	protected function removeSpaces() {
+		$content = $this->getFileContent();
+		
+		$content = preg_replace('/\'.*\'(*SKIP)(*F)|".*"(*SKIP)(*F)|\s/', '', $content);
 		
 		$this->setFileContent($content);
 	}
