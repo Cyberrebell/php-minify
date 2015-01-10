@@ -25,14 +25,4 @@ class JsScope extends JsCode
 	function getEndOfScope() {
 		return $this->endOfScope;
 	}
-	
-	protected function getMatchingCloseChar($openChar) {
-		if ($openChar == '(') {
-			return ')';
-		} elseif ($openChar == '{') {
-			return '}';
-		} else {
-			throw new \Exception('Used JsScope-Class with the Character "' . $this->scopeOpenChar . '" which is not a scope limiter!');
-		}
-	}
 }

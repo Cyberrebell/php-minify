@@ -60,10 +60,27 @@ class JsCode
 					switch ($nextWord) {	//handle js-keywords
 						case 'var':
 							$varName = $this->getNextWord($code, $i + 3);
+// 							var_dump($varName); exit;
 							break;
 						case 'function':
+							$functionName = $this->getNextWord($code, $i + 8);
+							if (strlen($functionName) > 0) {
+								$functionName = ' ' . $functionName;
+							}
+							
+							$signatureStart = strpos($code, '(', $i + 8);
+							$signatureEnd = strpos($code, ')', $i + 9);
+							$signature = substr($code, $signatureStart + 1, $signatureEnd - $signatureStart - 1);
+							$signature = '(' . str_replace(self::$spaceChars, '', $signature) . ')';
+							$this->segments[] = 'function' . $functionName . $signature;
+							
+							$functionBodyStart = strpos($code, '{', $signatureEnd);
+							$scope = new JsScope(substr($code, $functionBodyStart));
+							$this->segments[] = $scope;
 							break;
 						case 'if':
+							$this->segments[] = 'if';
+							$conditionStart = strpos($code, '(', $i + 2);
 							break;
 						case 'for':
 							break;
@@ -80,9 +97,19 @@ class JsCode
 		}
 	}
 	
-	protected function getNextWord($code, $offset = 0) {
+	protected function getNextWord($code, $offset = 0, $skipSpace = true) {
+		$codeStrLen = strlen($code);
+		for ($newOffset = $offset; $newOffset < $codeStrLen; $newOffset++) {
+			if (!in_array($code[$newOffset], self::$spaceChars)) {
+				$offset = $newOffset;
+				break;
+			}
+		}
+		
 		$nextSpace = false;
-		foreach (self::$spaceChars as $char) {
+		$wordDelimiters = self::$spaceChars;
+		$wordDelimiters[] = '(';	//add ( as word delimiter e.g. function(...
+		foreach ($wordDelimiters as $char) {
 			$nextOfThisChar = strpos($code, $char, $offset);
 			if ($nextOfThisChar && ($nextSpace === false || $nextOfThisChar < $nextSpace)) {
 				$nextSpace = $nextOfThisChar;
@@ -94,5 +121,19 @@ class JsCode
 		} else {
 			return substr($code, $offset, $nextSpace - $offset);
 		}
+	}
+	
+	protected function getMatchingCloseChar($openChar) {
+		if ($openChar == '(') {
+			return ')';
+		} elseif ($openChar == '{') {
+			return '}';
+		} else {
+			throw new \Exception('Used JsScope-Class with the Character "' . $this->scopeOpenChar . '" which is not a scope limiter!');
+		}
+	}
+	
+	protected function getMatchingCloseCharPosition($code, $offset) {
+		
 	}
 }
