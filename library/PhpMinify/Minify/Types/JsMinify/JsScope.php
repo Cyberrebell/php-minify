@@ -4,7 +4,7 @@ namespace PhpMinify\Minify\Types\JsMinify;
 
 class JsScope
 {
-    public static $jsNoSpaceBehindChars = [';', ')', '}', '=', '>', '<', '+', '-', '*', '%'];
+    public static $jsNoSpaceBehindChars = [';', ')', '}', ',', '=', '>', '<', '+', '-', '*', '%', '&'];
     protected $length;
     protected $segments = [];
 
@@ -69,13 +69,9 @@ class JsScope
                     break;
                 case '/':
                     //handle comments
-                    if ($code[$i + 1] == '/') {
-                        $nextNewline = strpos($code, "\n", $i);
-                        $i = $nextNewline;
-                        break;
-                    } elseif ($code[$i + 1] == '*') {
-                        $closeSymbol = strpos($code, '*/', $i) + 1;
-                        $i = $closeSymbol;
+                    $comment = new JsComment(substr($code, $i));
+                    if ($comment->isComment()) {
+                        $i += $comment->getLength() - 1;
                         break;
                     }
                     // no break
@@ -118,8 +114,13 @@ class JsScope
                         $lastChar = end($this->segments);
                         if (!$lastChar || $lastChar == ';') {
                             $variable = new JsVariable(substr($code, $i));
-                            $this->segments[] = $variable;
-                            $i += $variable->getLength() - 1;
+                            if ($variable->isKeyword()) {
+                                $this->segments[] = $variable->__toString() . ' ';
+                                $i += $variable->getLength();
+                            } else {
+                                $this->segments[] = $variable;
+                                $i += $variable->getLength() - 1;
+                            }
                         } else {
                             $this->segments[] = $code[$i];
                         }

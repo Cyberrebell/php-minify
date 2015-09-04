@@ -20,6 +20,11 @@ class JsVariable
                 $this->length = $i;
             } elseif (ctype_space($code[$i])) {
                 continue;
+            } elseif ($code[$i] == '/') {
+                $comment = new JsComment(substr($code, $i));
+                if ($comment->isComment()) {
+                    $i += $comment->getLength() - 1;
+                }
             } else {
                 $this->name .= $code[$i];
             }
