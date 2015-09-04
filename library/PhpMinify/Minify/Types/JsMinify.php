@@ -3,14 +3,13 @@
 namespace PhpMinify\Minify\Types;
 
 use PhpMinify\Minify\Types\AbstractMinify;
+use PhpMinify\Minify\Types\JsMinify\JsScope;
 
 class JsMinify extends AbstractMinify
 {
     public function minify()
     {
-        $this->removeOneLineComments();
-        $this->removeMultilineComments();
-        $this->removeSpaces();
+        $this->parseJsCode();
 
         $this->save();
     }
@@ -19,7 +18,7 @@ class JsMinify extends AbstractMinify
     {
         $content = $this->getFileContent();
 
-        $jsCode = new JsCode($content);
+        $jsCode = new JsScope($content);
         
         $this->setFileContent($jsCode);
     }
