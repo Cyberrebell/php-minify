@@ -4,6 +4,7 @@ namespace PhpMinify\Minify\Types\JsMinify;
 
 class JsVariable
 {
+    public static $jsKeywords = ['null', 'true', 'false', 'break', 'case', 'class', 'catch', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'else', 'export', 'extends', 'finally', 'for', 'function', 'if', 'import', 'in', 'instanceof', 'let', 'new', 'return', 'super', 'switch', 'this', 'throw', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield', 'enum', 'await', 'implements', 'package', 'protected', 'static', 'interface', 'private', 'public'];
     protected $length;
     protected $name;
     protected $isDeclaration = false;
@@ -28,6 +29,15 @@ class JsVariable
     public function getLength()
     {
         return $this->length;
+    }
+    
+    public function isKeyword()
+    {
+        if (in_array($this->name, self::$jsKeywords, true)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function __toString()

@@ -4,7 +4,7 @@ namespace PhpMinify\Minify\Types\JsMinify;
 
 class JsScope
 {
-    public static $jsNoSpaceBehindChars = [';', ')', '}', '=', '>', '<'];
+    public static $jsNoSpaceBehindChars = [';', ')', '}', '=', '>', '<', '+', '-', '*', '%'];
     protected $length;
     protected $segments = [];
 
@@ -42,6 +42,8 @@ class JsScope
                     break;
                 case '}':
                     $this->length = $i;
+                    $this->removeLastSemicolon();
+                    $this->removeLastSpace();
                     break;
                 case '(':
                     $this->segments[] = '(';
@@ -52,6 +54,7 @@ class JsScope
                     break;
                 case ')':
                     $this->length = $i;
+                    $this->removeLastSpace();
                     break;
                 case "'":
                     //handle strings
@@ -82,6 +85,11 @@ class JsScope
                         $i = $conditionStart - 1;
                         $this->segments[] = 'for';
                         break;
+                    } elseif (substr($code, $i, 8) == 'function' && (ctype_space($code[8]) || $code[8] == '(')) {
+                        $function = new JsFunction(substr($code, $i));
+                        $this->segments[] = $function;
+                        $i += $function->getLength() - 1;
+                        break;
                     }
                     // no break
                 case 'i':
@@ -90,17 +98,6 @@ class JsScope
                         $i = $conditionStart - 1;
                         $this->segments[] = 'if';
                         break;
-                    }
-                    // no break
-                case 'v':
-                    if (substr($code, $i, 3) == 'var' && ctype_space($code[3])) {
-                        $lastChar = end($this->segments);
-                        if (!$lastChar || $lastChar == ';' || ctype_space($lastChar)) {
-                            $variable = new JsVariable(substr($code, $i));
-                            $this->segments[] = $variable;
-                            $i += $variable->getLength() - 1;
-                            break;
-                        }
                     }
                     // no break
                 case 'w':
@@ -118,10 +115,31 @@ class JsScope
                             $this->segments[] = ' ';
                         }
                     } else {
-                        $this->segments[] = $code[$i];
+                        $lastChar = end($this->segments);
+                        if (!$lastChar || $lastChar == ';') {
+                            $variable = new JsVariable(substr($code, $i));
+                            $this->segments[] = $variable;
+                            $i += $variable->getLength() - 1;
+                        } else {
+                            $this->segments[] = $code[$i];
+                        }
                     }
                     break;
             }
+        }
+    }
+    
+    protected function removeLastSemicolon()
+    {
+        if (end($this->segments) == ';') {
+            unset($this->segments[key($this->segments)]);
+        }
+    }
+    
+    protected function removeLastSpace()
+    {
+        if (ctype_space(end($this->segments))) {
+            unset($this->segments[key($this->segments)]);
         }
     }
 }
