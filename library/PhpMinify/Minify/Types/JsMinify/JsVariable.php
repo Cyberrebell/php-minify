@@ -8,6 +8,7 @@ class JsVariable
     protected $length;
     protected $name;
     protected $isDeclaration = false;
+    protected $isFunctionCall = false;
 
     public function __construct($code)
     {
@@ -18,6 +19,12 @@ class JsVariable
                 $this->isDeclaration = true;
             } elseif ($this->name && (ctype_space($code[$i]) || $code[$i] == ';')) {
                 $this->length = $i;
+                $nextCharPos = $this->getFirstNonSpaceCharPos(substr($code, $i));
+                if ($code[$i + $nextCharPos] == '(') {
+                    $this->length = $i + $nextCharPos;
+                    $this->isFunctionCall = true;
+                    break;
+                }
             } elseif (ctype_space($code[$i])) {
                 continue;
             } elseif ($code[$i] == '/') {
@@ -25,6 +32,10 @@ class JsVariable
                 if ($comment->isComment()) {
                     $i += $comment->getLength() - 1;
                 }
+            } elseif ($code[$i] == '(') {
+                $this->length = $i;
+                $this->isFunctionCall = true;
+                break;
             } else {
                 $this->name .= $code[$i];
             }
@@ -44,6 +55,11 @@ class JsVariable
             return false;
         }
     }
+    
+    public function isFunctionCall()
+    {
+        return $this->isFunctionCall;
+    }
 
     public function __toString()
     {
@@ -51,6 +67,16 @@ class JsVariable
             return 'var ' . $this->name;
         } else {
             return $this->name;
+        }
+    }
+    
+    protected function getFirstNonSpaceCharPos($string)
+    {
+        $length = strlen($string);
+        for ($i = 0; $i < $length; $i++) {
+            if (!ctype_space($string[$i])) {
+                return $i;
+            }
         }
     }
 }

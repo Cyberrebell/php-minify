@@ -73,6 +73,11 @@ class JsScope
                     if ($comment->isComment()) {
                         $i += $comment->getLength() - 1;
                         break;
+                    } else {
+                        $regex = new JsRegex(substr($code, $i));
+                        $this->segments[] = $regex;
+                        $i += $regex->getLength() - 1;
+                        break;
                     }
                     // no break
                 case 'f':
@@ -112,11 +117,15 @@ class JsScope
                         }
                     } else {
                         $lastChar = end($this->segments);
-                        if (!$lastChar || $lastChar == ';') {
+                        if (!$lastChar || $lastChar == ';' || ctype_space($lastChar)) {
                             $variable = new JsVariable(substr($code, $i));
                             if ($variable->isKeyword()) {
-                                $this->segments[] = $variable->__toString() . ' ';
+                                $this->segments[] = $variable->__toString();
+                                $this->segments[] = ' ';
                                 $i += $variable->getLength();
+                            } elseif ($variable->isFunctionCall()) {
+                                $this->segments[] = $variable;
+                                $i += $variable->getLength() - 1;
                             } else {
                                 $this->segments[] = $variable;
                                 $i += $variable->getLength() - 1;

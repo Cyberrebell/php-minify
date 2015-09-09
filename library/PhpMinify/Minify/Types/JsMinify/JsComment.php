@@ -8,17 +8,13 @@ class JsComment
 
     public function __construct($code)
     {
-        $this->length = strlen($code);
-        for ($i = 1; $i < $this->length; $i++) {
-            if ($code[$i] == '/') {
-                $nextNewline = strpos($code, "\n");
-                $this->length = $nextNewline + 1;
-                break;
-            } elseif ($code[$i] == '*') {
-                $closeSymbol = strpos($code, '*/');
-                $this->length = $closeSymbol + 2;
-                break;
-            }
+        $this->length = 0;
+        if ($code[1] == '/') {
+            $nextNewline = strpos($code, "\n");
+            $this->length = $nextNewline + 1;
+        } elseif ($code[1] == '*') {
+            $closeSymbol = strpos($code, '*/');
+            $this->length = $closeSymbol + 2;
         }
     }
     
@@ -29,7 +25,7 @@ class JsComment
     
     public function isComment()
     {
-        return $this->length > 0;
+        return ($this->length > 0);
     }
 
     public function __toString()
