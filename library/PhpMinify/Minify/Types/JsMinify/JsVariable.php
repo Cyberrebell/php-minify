@@ -4,6 +4,7 @@ namespace PhpMinify\Minify\Types\JsMinify;
 
 class JsVariable
 {
+    public static $jsVariableDelimiters = [';', ',', '=', '>', '<', '+', '-', '*', '%', '&', '|'];
     public static $jsKeywords = ['null', 'true', 'false', 'break', 'case', 'class', 'catch', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'else', 'export', 'extends', 'finally', 'for', 'function', 'if', 'import', 'in', 'instanceof', 'let', 'new', 'return', 'super', 'switch', 'this', 'throw', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield', 'enum', 'await', 'implements', 'package', 'protected', 'static', 'interface', 'private', 'public'];
     protected $length;
     protected $name;
@@ -17,7 +18,7 @@ class JsVariable
             if ($i == 0 && substr($code, 0, 3) == 'var' && ctype_space($code[3])) {
                 $i += 2;
                 $this->isDeclaration = true;
-            } elseif ($this->name && (ctype_space($code[$i]) || $code[$i] == ';')) {
+            } elseif ($this->name && (ctype_space($code[$i]) || in_array ($code[$i], self::$jsVariableDelimiters, true))) {
                 $this->length = $i;
                 $nextCharPos = $this->getFirstNonSpaceCharPos(substr($code, $i));
                 if ($code[$i + $nextCharPos] == '(') {

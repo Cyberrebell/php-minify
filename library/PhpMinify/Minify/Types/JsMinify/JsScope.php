@@ -4,7 +4,7 @@ namespace PhpMinify\Minify\Types\JsMinify;
 
 class JsScope
 {
-    public static $jsNoSpaceBehindChars = [';', ')', '}', ',', '=', '>', '<', '+', '-', '*', '%', '&'];
+    public static $jsNoSpaceBehindChars = [')', '}', ']', ';', ',', '=', '>', '<', '+', '-', '*', '%', '&', '|'];
     protected $length;
     protected $segments = [];
 
@@ -117,7 +117,7 @@ class JsScope
                         }
                     } else {
                         $lastChar = end($this->segments);
-                        if (!$lastChar || $lastChar == ';' || ctype_space($lastChar)) {
+                        if (!$lastChar || ctype_space($lastChar) || (in_array ($lastChar, self::$jsNoSpaceBehindChars, true) && !in_array($code[$i], JsVariable::$jsVariableDelimiters, true))) {
                             $variable = new JsVariable(substr($code, $i));
                             if ($variable->isKeyword()) {
                                 $this->segments[] = $variable->__toString();
