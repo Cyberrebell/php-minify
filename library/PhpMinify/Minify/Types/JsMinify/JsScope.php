@@ -4,7 +4,7 @@ namespace PhpMinify\Minify\Types\JsMinify;
 
 class JsScope
 {
-    public static $jsNoSpaceBehindChars = [')', '}', ']', ';', ',', '=', '>', '<', '+', '-', '*', '%', '&', '|'];
+    public static $jsNoSpaceBehindChars = [')', '}', ']', ';', ',', '=', '>', '<', '+', '-', '*', '%', '&', '|', ':'];
     protected $length;
     protected $segments = [];
 
@@ -74,10 +74,13 @@ class JsScope
                         $i += $comment->getLength() - 1;
                         break;
                     } else {
-                        $regex = new JsRegex(substr($code, $i));
-                        $this->segments[] = $regex;
-                        $i += $regex->getLength() - 1;
-                        break;
+                        $lastChar = end($this->segments);
+                        if (ctype_space($lastChar) || in_array($lastChar, [',', ';', '='])) {
+                            $regex = new JsRegex(substr($code, $i));
+                            $this->segments[] = $regex;
+                            $i += $regex->getLength() - 1;
+                            break;
+                        }
                     }
                     // no break
                 case 'f':
@@ -121,8 +124,7 @@ class JsScope
                             $variable = new JsVariable(substr($code, $i));
                             if ($variable->isKeyword()) {
                                 $this->segments[] = $variable->__toString();
-                                $this->segments[] = ' ';
-                                $i += $variable->getLength();
+                                $i += $variable->getLength() - 1;
                             } elseif ($variable->isFunctionCall()) {
                                 $this->segments[] = $variable;
                                 $i += $variable->getLength() - 1;

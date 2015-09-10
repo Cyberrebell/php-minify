@@ -4,7 +4,7 @@ namespace PhpMinify\Minify\Types\JsMinify;
 
 class JsVariable
 {
-    public static $jsVariableDelimiters = [';', ',', '=', '>', '<', '+', '-', '*', '%', '&', '|'];
+    public static $jsVariableDelimiters = [';', ',', '=', '>', '<', '+', '-', '*', '%', '&', '|', ':', '['];
     public static $jsKeywords = ['null', 'true', 'false', 'break', 'case', 'class', 'catch', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'else', 'export', 'extends', 'finally', 'for', 'function', 'if', 'import', 'in', 'instanceof', 'let', 'new', 'return', 'super', 'switch', 'this', 'throw', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield', 'enum', 'await', 'implements', 'package', 'protected', 'static', 'interface', 'private', 'public'];
     protected $length;
     protected $name;
@@ -67,7 +67,7 @@ class JsVariable
         if ($this->isDeclaration) {
             return 'var ' . $this->name;
         } else {
-            return $this->name;
+            return '' . $this->name;
         }
     }
     
