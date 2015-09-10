@@ -13,8 +13,16 @@ class JsRegex
         $this->length = strlen($code);
         $closingDelimiterFound = false;
         for ($i = 1; $i < $this->length; $i++) {
-            if (!$closingDelimiterFound && $code[$i] == '/' && $code[$i - 1] != '\\') {
-                $closingDelimiterFound = true;
+            if (!$closingDelimiterFound && $code[$i] == '/') {
+                for ($b = $i - 1; $b > 0; $b--) {
+                    if ($code[$b] != '\\') {
+                        break;
+                    }
+                }
+                $b++;
+                if (($i - $b) % 2 == 0) {
+                    $closingDelimiterFound = true;
+                }
             } elseif ($closingDelimiterFound && (ctype_space($code[$i]) || in_array($code[$i], self::$jsCharBehindRegex, true))) {
                 $this->length = $i;
                 $this->string = substr($code, 0, $this->length);
